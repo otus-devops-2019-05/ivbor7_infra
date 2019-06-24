@@ -134,13 +134,13 @@ reddit-app  us-central1-a  g1-small                   10.128.0.6   34.66.210.167
  testapp_port = 9292
 ```
 
- - [x] installed ruby and bundle
+ - [x] **installed ruby and bundle**
 ```
 $ sudo apt update
 $ sudo apt install -y ruby-full ruby-bundler build-essential```
 
- - [x] mongodb was installed by command:
- ```
+ -[x] ** mongodb was installed by command:**
+```
 $ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
 $ sudo bash -c 'echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" > /etc/apt/sources.list.d/mongodb-org-3.2.list'
 ```
