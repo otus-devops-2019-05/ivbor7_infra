@@ -19,10 +19,10 @@ if [[ $? -eq 0 ]]; then echo "$DateStr -bundle- installed successfully "  >> $LO
 else echo "$DateStr -- installation failed. Error code: $? "  >> $LOGFILE 2>&1
 fi
 
-sudo gem install bundler
-if [[ $? -eq 0 ]]; then echo "$DateStr -bundler- installed successfully "  >> $LOGFILE 2>&1
-else echo "$DateStr -- installation failed. Error code: $? "  >> $LOGFILE 2>&1
-fi
+#sudo gem install bundler
+#if [[ $? -eq 0 ]]; then echo "$DateStr -bundler- installed successfully "  >> $LOGFILE 2>&1
+#else echo "$DateStr -- installation failed. Error code: $? "  >> $LOGFILE 2>&1
+#fi
 
 # run the app's  server
 puma -d
@@ -33,7 +33,6 @@ _st=$(ps -aux |grep puma | grep -v grep | awk -F: '/tcp/{print $5}' | egrep -o "
 # if [ -z $_st ];  then echo "Reddit is not running"; else echo "Reddit server is running on $_st port"; fi
 
 if [[ ! -z $_st ]]; then echo "$DateStr Reddit Deploying completed. Server is running on $_st port" >> $LOGFILE 2>&1
-else
-echo "Reddit server startup failed. For details see log $LOGFILE" >> $LOGFILE 2>&1
+else echo "Reddit server startup failed. For details see log $LOGFILE" >> $LOGFILE 2>&1
 fi
 
