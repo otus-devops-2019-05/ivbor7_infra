@@ -61,11 +61,11 @@ fi
 puma -d
 
 # checking port app running on
-_st=ps -aux |grep puma | grep -v grep | awk -F: '/tcp/{print $5}' | egrep -o "^[0-9]{1,5}"
+_st=$(ps -aux |grep puma | grep -v grep | awk -F: '/tcp/{print $5}' | egrep -o "^[0-9]{1,5}")
 
 # if [ -z $_st ];  then echo "Reddit is not running"; else echo "Reddit server is running on $_st port"; fi
 
-if [ ! -z $_st ]; then echo "$DateStr Reddit Deploying completed. Server is running on $_st port" >> $LOGFILE 2&>1
+if [[ ! -z $_st ]]; then echo "$DateStr Reddit Deploying completed. Server is running on $_st port" >> $LOGFILE 2>&1
 else
-echo "Reddit server startup failed. For details see log $LOGFILE" >> $LOGFILE 2&>1
+echo "Reddit server startup failed. For details see log $LOGFILE" >> $LOGFILE 2>&1
 fi
