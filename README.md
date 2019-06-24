@@ -95,3 +95,52 @@ appuser  pts/0        Jun 20 12:48 (10.128.0.4)
 ```
 
   - [x] **Additional task-3: trusted SSL-certificates for VPN-server was obtained from the letsencrypt.org ACME server and applyed**
+
+## HW#4
+ - [x] new cloud-testapp branch was created for HW#4
+ - [x] folder VPN created, setupvpn.sh and cloud-bastion.ovpn files moved in this folder running command "$ git mv"
+ - [x] Установим и настроим gcloud для работы с нашим аккаунтом using this link https://cloud.google.com/sdk/docs/;
+ - [x] Создадим хост с помощью gcloud;
+ - [x] Установим на нем ruby для работы приложения;
+ - [x] Установим MongoDB и запустим;
+ - [x] Задеплоим тестовое приложение, запустим и проверим его работу.
+
+ - create a test VM instance after installing gcloud on local machine:
+  the gcloud script for creating the VM instance is presented below:
+ ```
+
+ $ gcloud compute instances create reddit-app\
+  --boot-disk-size=10GB \
+  --image-family ubuntu-1604-lts \
+  --image-project=ubuntu-os-cloud \
+  --machine-type=g1-small \
+  --tags puma-server \
+  --restart-on-failure
+  added by myself:
+  --metadata startup-script='wget -O - https://gist.githubusercontent.com/Nklya/4f8944d99e43b6c44a9767a93daa1592/raw/96a06a2272b513abcf52ef1d4894fae83d4d71dd/run_app.sh | b$
+
+
+
+  Created [https://www.googleapis.com/compute/v1/projects/infra-244305/zones/us-central1-a/instances/reddit-app].
+
+
+
+  Created [https://www.googleapis.com/compute/v1/projects/infra-244305/zones/us-central1-a/instances/reddit-app].
+NAME        ZONE           MACHINE_TYPE  PREEMPTIBLE  INTERNAL_IP  EXTERNAL_IP    STATUS
+reddit-app  us-central1-a  g1-small                   10.128.0.6   34.66.210.167  RUNNING
+
+
+ testapp_IP = 35.226.88.148
+ testapp_port = 9292
+```
+
+ - [x] installed ruby and bundle
+```
+$ sudo apt update
+$ sudo apt install -y ruby-full ruby-bundler build-essential```
+
+ - [x] mongodb was installed by command:
+ ```
+$ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+$ sudo bash -c 'echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" > /etc/apt/sources.list.d/mongodb-org-3.2.list'
+```
