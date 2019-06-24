@@ -118,8 +118,8 @@ reddit-app  us-central1-a  g1-small                   10.128.0.8   35.226.88.148
 ```
   - in this command the startup_script.sh was used for installing Ruby, MongoDB and deploying test application
   - final parameters of the VM:
-    - testapp_IP = 35.226.88.148
-    - testapp_port = 9292
+  testapp_IP = 35.226.88.148
+  testapp_port = 9292
 
  - [x] **ruby and bundle were installed:**
 ```
