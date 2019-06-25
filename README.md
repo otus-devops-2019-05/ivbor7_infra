@@ -95,3 +95,60 @@ appuser  pts/0        Jun 20 12:48 (10.128.0.4)
 ```
 
   - [x] **Additional task-3: trusted SSL-certificates for VPN-server was obtained from the letsencrypt.org ACME server and applyed**
+
+## HW#4
+ - [x] **new cloud-testapp branch was created for HW#4**
+ - [x] **folder VPN created, setupvpn.sh and cloud-bastion.ovpn files moved in this folder running command "$ git mv"**
+ - [x] **gcloud installed on local machine using this link https://cloud.google.com/sdk/docs/;**
+ - [x] **VM instance created via gcloud;**
+   - the gcloud command for creating the VM instance localy via cli is presented below:
+```
+ $ gcloud compute instances create reddit-app\
+  --boot-disk-size=10GB \
+  --image-family ubuntu-1604-lts \
+  --image-project=ubuntu-os-cloud \
+  --machine-type=g1-small \
+  --tags puma-server \
+  --restart-on-failure\
+  --metadata-from-file startup-script=$HOME/Scripts/startup_script.sh
+
+  Created [https://www.googleapis.com/compute/v1/projects/infra-244305/zones/us-central1-a/instances/reddit-app].
+NAME        ZONE           MACHINE_TYPE  PREEMPTIBLE  INTERNAL_IP  EXTERNAL_IP    STATUS
+reddit-app  us-central1-a  g1-small                   10.128.0.8   35.226.88.148  RUNNING
+```
+  - in this command the startup_script.sh was used for installing Ruby, MongoDB and deploying test application
+  - final parameters of the VM:
+  testapp_IP = 35.226.88.148
+  testapp_port = 9292
+
+ - [x] **ruby and bundle were installed:**
+```
+$ sudo apt update
+$ sudo apt install -y ruby-full ruby-bundler build-essential```
+```
+  - install_ruby.sh - Ruby setup script added to repository
+
+ - [x] **mongodb was installed by command:**
+```
+$ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+$ sudo bash -c 'echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse" > /etc/apt/sources.list.d/mongodb-org-3.2.list'
+```
+  - install_mongodb.sh - Mongodb setup script added to repository
+
+ - [x] **test app was deployed with help of deploy.sh script that created and added into the repository**
+
+ - [x] **Extra tasks:**
+  - [x] startup_script.sh - script was designed to automate the creation of VM instance and deploy the test application on it.
+
+  - [x] the firewall rull was removed from web and added via gcloud console:
+```
+  $ gcloud compute --project=infra-244305 firewall-rules create default-puma-server\
+  --description="rules for puma-server for test app"\
+  --direction=INGRESS\
+  --priority=1000\
+  --network=default\
+  --action=ALLOW\
+  --rules=tcp:9292\
+  --source-ranges=0.0.0.0/0\
+  --target-tags=puma-server
+```
