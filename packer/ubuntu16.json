@@ -1,15 +1,35 @@
 {
+
+  "variables": {
+
+    "source_image_family": "ubuntu-1604-lts",
+    "image_description": "Base image with MongoDB, Ruby based on Ubuntu 1604 LTS",
+    "machine_type": "f1-micro",
+    "region": "us-central1",
+    "zone": "us-central1-a",
+    "project_id": "infra-244305",
+    "network": "default",
+    "tags": "puma-server"
+
+  },
+
     "builders": [
         {
             "type": "googlecompute",
-            "project_id": "infra-244305",
+            "project_id": "{{user `project_id`}}",
             "image_name": "reddit-base-{{timestamp}}",
             "image_family": "reddit-base",
-            "source_image_family": "ubuntu-1604-lts",
-            "zone": "europe-west1-b",
+            "source_image_family": "{{user `source_image_family`}}",
+	    "image_description": "{{user `image_description`}}",
+	    "disk_size": 10,
+	    "disk_type": "pd-standard",
+	    "disk_name": "",
+	    "region": "{{user `region`}}",
+            "zone": "{{user `zone`}}",
+	    "network": "{{user `network`}}",
             "ssh_username": "appuser",
-            "machine_type": "f1-micro",
-	    "tags": ["puma-server"]
+            "machine_type": "{{user `machine_type`}}",
+	    "tags": "{{user `tags`}}"
         }
     ],
 

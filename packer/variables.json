@@ -1,0 +1,11 @@
+{
+
+  "variables": {
+
+    "source_image_family": "ubuntu-1604-lts",
+    "machine_type": "f1-micro",
+    "zone": "us-central1-a",
+    "project_id": "infra-244305"
+
+  }
+}
