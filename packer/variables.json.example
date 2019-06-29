@@ -1,11 +1,9 @@
 {
 
-  "variables": {
-
     "source_image_family": "some-OS-image",
     "machine_type": "appropriate-machine-conf",
     "zone": "some-zone-name",
     "project_id": "product-IDNNNN"
 
-  }
 }
+
