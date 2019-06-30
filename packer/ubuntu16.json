@@ -2,12 +2,12 @@
 
   "variables": {
 
-    "source_image_family": "ubuntu-1604-lts",
+    "source_image_family": "",
+    "machine_type": "",
+    "zone": "",
+    "project_id": "",
     "image_description": "Base image with MongoDB, Ruby based on Ubuntu 1604 LTS",
-    "machine_type": "f1-micro",
     "region": "us-central1",
-    "zone": "us-central1-a",
-    "project_id": "infra-244305",
     "network": "default",
     "tags": "puma-server"
 
