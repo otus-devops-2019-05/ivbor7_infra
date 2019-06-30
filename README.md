@@ -152,3 +152,20 @@ $ sudo bash -c 'echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/
   --source-ranges=0.0.0.0/0\
   --target-tags=puma-server
 ```
+
+## HW#5
+
+Файл с переменными variables.json, нужно внести в .gitignore, а в
+репозиторий добавить файл variables.json.example с примером
+заполнения, используя вымышленные значения
+
+Созданный шаблон должен называться immutable.json и
+содержаться в директории packer, image_family у получившегося
+образа должен быть reddit-full. Дополнительные файлы можно
+положить в директорию packer/files. Для запуска приложения
+при старте инстанса необходимо использовать systemd unit.
+
+ - [x] - Create shell-script create-reddit-vm.sh in config-scripts directory.
+ Запишите в него команду которая запустит виртуальную машину из
+образа подготовленного вами в рамках этого ДЗ, из
+семейства reddit-full
