@@ -1,9 +1,7 @@
 [Unit]
-Description=Puma Server (http)
-After=network.target syslog.target
-Requires=network.target dbus.service
-After=systemd-user-sessions.service
-Wants=mongod.service
+Description=Puma HTTP Server
+After=network.target
+
 
 [Service]
 # Foreground process (do not use --daemon in ExecStart or config.rb)
@@ -11,9 +9,11 @@ Type=simple
 
 WorkingDirectory=/home/appuser/reddit
 
-ExecStart=/usr/local/bin/pumactl start &
-Restart=on-failure
+ExecStart=/usr/local/bin/puma
+
+
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
-Alias=puma.service
+
