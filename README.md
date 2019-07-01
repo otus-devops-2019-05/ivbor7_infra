@@ -152,3 +152,22 @@ $ sudo bash -c 'echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/
   --source-ranges=0.0.0.0/0\
   --target-tags=puma-server
 ```
+
+## HW#5
+
+ - [x] the VM image with option "--image-family=reddit-base" baked using Packer
+ and the ubuntu16.json template was created for this task. Also the variables.json.example was created
+ and added to repository instead of the variables.json that filtered with .gitignore for security reasons.
+ To validate the packer template run this command:
+ ` $ packer validate -var-file=variables.json ubuntu16.json`
+ and to build the image reddit-base with mongodb and ruby installed run command:
+ ` $ packer build -var-file=variables.json ubuntu16.json`
+
+ - [x] the immutable.json template was created for "backing" the VM full image with reddit application deployed on-board. The previously created reddit-base family image is used for full immutable image creation.
+ "--image-family=reddit-full" assigned to the immutable image. All required files for creating the image are placed
+ in packer/files and packer/scripts folders.
+  To build the reddit-full image with reddit application inside run command:
+ `$ packer build -var-file=variables.json immutable.json`
+Inside VM the puma-server will start due to puma.service created and provisioned via immutable.json.
+
+ - [x] - Create shell-script create-reddit-vm.sh in config-scripts directory to run the VM instance with running reddit application inside.

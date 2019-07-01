@@ -1,0 +1,19 @@
+[Unit]
+Description=Puma HTTP Server
+After=network.target
+
+
+[Service]
+# Foreground process (do not use --daemon in ExecStart or config.rb)
+Type=simple
+
+WorkingDirectory=/home/appuser/reddit
+
+ExecStart=/usr/local/bin/puma
+
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
