@@ -155,17 +155,19 @@ $ sudo bash -c 'echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/
 
 ## HW#5
 
-Файл с переменными variables.json, нужно внести в .gitignore, а в
-репозиторий добавить файл variables.json.example с примером
-заполнения, используя вымышленные значения
+ - [x] the VM image with option "--image-family=reddit-base" baked using Packer
+ and the ubuntu16.json template was created for this task. Also the variables.json.example was created
+ and added to repository instead of the variables.json that filtered with .gitignore for security reasons.
+ To validate the packer template run this command:
+ ` $ packer validate -var-file=variables.json ubuntu16.json`
+ and to build the image reddit-base with mongodb and ruby installed run command:
+ ` $ packer build -var-file=variables.json ubuntu16.json`
 
-Созданный шаблон должен называться immutable.json и
-содержаться в директории packer, image_family у получившегося
-образа должен быть reddit-full. Дополнительные файлы можно
-положить в директорию packer/files. Для запуска приложения
-при старте инстанса необходимо использовать systemd unit.
+ - [x] the immutable.json template was created for "backing" the VM full image with reddit application deployed on-board. The previously created reddit-base family image is used for full immutable image creation.
+ "--image-family=reddit-full" assigned to the immutable image. All required files for creating the image are placed
+ in packer/files and packer/scripts folders.
+  To build the reddit-full image with reddit application inside run command:
+ `$ packer build -var-file=variables.json immutable.json`
+Inside VM the puma-server will start due to puma.service created and provisioned via immutable.json.
 
- - [x] - Create shell-script create-reddit-vm.sh in config-scripts directory.
- Запишите в него команду которая запустит виртуальную машину из
-образа подготовленного вами в рамках этого ДЗ, из
-семейства reddit-full
+ - [x] - Create shell-script create-reddit-vm.sh in config-scripts directory to run the VM instance with running reddit application inside.
