@@ -1,0 +1,5 @@
+project = "project-idnnnnn"
+public_key_path = "~/.ssh/username.pub"
+private_key_path = "~/.ssh/username"
+disk_image = "app-image"
+zone = "zone_name_a"
