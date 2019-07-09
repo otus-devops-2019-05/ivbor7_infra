@@ -1,4 +1,7 @@
-*.tmp
 *.swp
-*.log
-packer/variables.json
+*.tmp
+*.tfstate
+*.tfstate.*.backup
+*.tfstate.backup
+*.tfvars
+.terraform/

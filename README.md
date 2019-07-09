@@ -171,3 +171,60 @@ $ sudo bash -c 'echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/
 Inside VM the puma-server will start due to puma.service created and provisioned via immutable.json.
 
  - [x] - Create shell-script create-reddit-vm.sh in config-scripts directory to run the VM instance with running reddit application inside.
+
+ ## HW#6
+ - install the tfswitch the command line tool that let you switch between defferent versions of terraform:
+``` $ curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash```
+for more details follow this link: https://warrensbox.github.io/terraform-switcher/ (or more complex way https://blog.gruntwork.io/installing-multiple-versions-of-terraform-with-homebrew-899f6d124ff9)
+ - the provider plugins was initialized by running the command in terraform folder with it's main config `$ sudo terraform -v`
+ - [x] - ssh-key for the appuser_web were added into the project metadata. New ssh-key appeared in the list of ssh-keys
+  and after executing the command `$ terraform apply` this ssh-key was removed. During the execution Terraform determined
+  the differences between current project state and the changes prepared to apply. As the current state was different
+  from the required one, so the project infrastructure was aligned with that specified in main.tf config file.
+ - [x] - input variable for zone created and the default value is assigned to it in terraform.tvars (see description in terraform.tvars.example)
+ - [x] - all config file were formated with help `$ terraform fmt`;
+ - [x] - terraform.tfvars filtered within .gitignore and was replaced in the repository by terraform.tfvars.example as
+ - [x] - input sshkey-variable for provisioner's connection was declared via resource "google_compute_project_metadata_item":
+```
+  resource "google_compute_project_metadata_item" "app_multiuserssh" {
+  key = "ssh-keys"
+  value = "${var.ssh_user}:${file(var.public_key_path)} \n${var.ssh_user1}:${file(var.public_key_path)} \n${var.ssh_user2}:${file(var.public_key_path)}"
+}
+  ```
+ - [x] - within the scope of extra tasks with "*" and "**" the HTTP Load Balancer was discribed in lb.tf in terraform code fashion
+
+ HTTP Load Balancing was described in terraform code using the following resources:
+  - google_compute_backend_service.reddit-backend
+
+  - google_compute_global_forwarding_rule.reddit-forward
+
+  - google_compute_http_health_check.reddit-health
+
+  - google_compute_instance.app[count]
+
+  - google_compute_instance_group.reddit-cluster
+
+  - google_compute_project_metadata_item.app_multiuserssh
+
+  - google_compute_target_http_proxy.reddit-target-proxy
+
+  - google_compute_url_map.reddit-lb
+
+ For multiple instances creating the "count" parameter was used:
+
+```
+# main.tf:
+# specify the number of instances
+  count        = "${var.count_instance}"
+# and change the name of instance appropriatly
+  name         = "reddit-app-${count.index}"
+
+# default value assigned in the  variables.tf:
+variable count_instance {
+  description = "number of instances"
+  default     = 1
+}
+
+# The required number of app instances is set in terraform.tvars:
+count_instance = 2
+```
