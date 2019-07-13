@@ -1,3 +1,4 @@
+# Terraform file
 resource "google_compute_instance" "db" {
   name = "reddit-db-base"
   machine_type = "f1-micro"
@@ -28,3 +29,4 @@ resource "google_compute_firewall" "firewall_mongo" {
   target_tags = ["reddit-db"]
   source_tags = ["reddit-app"]
 }
+
