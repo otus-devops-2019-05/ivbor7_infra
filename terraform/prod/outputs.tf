@@ -1,5 +1,5 @@
 output "app_ext_ip" {
- value = "${module.app.app_ext_ip}"
+  value = "${module.app.app_ext_ip}"
 }
 
 output "db_int_ip" {

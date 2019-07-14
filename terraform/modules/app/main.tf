@@ -1,6 +1,7 @@
 # Terraform file
 resource "google_compute_instance" "app" {
-  name = "reddit-app-base"
+  name = "reddit-app-${count.index+1}"
+  count = "${var.count_instance}"
   machine_type = "f1-micro"
   zone = "${var.zone}"
   tags = ["reddit-app"]
