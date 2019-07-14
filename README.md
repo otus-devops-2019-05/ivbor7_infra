@@ -172,16 +172,8 @@ Inside VM the puma-server will start due to puma.service created and provisioned
 
  - [x] - Create shell-script create-reddit-vm.sh in config-scripts directory to run the VM instance with running reddit application inside.
 
- ## HW#6
- - install the tfswitch the command line tool that let you switch between defferent versions of terraform:
-``` $ curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash```
-for more details follow this link: https://warrensbox.github.io/terraform-switcher/ (or more complex way https://blog.gruntwork.io/installing-multiple-versions-of-terraform-with-homebrew-899f6d124ff9)
- - initialized provider plugins running the command in terraform folder with it's main config `$ sudo terraform -v`
-After adding the ssh-key for the appuser_web into the project metadata `$ terraform apply` was execute.
-During the execution Terraform determined the differences in the states of project metadata
-and performed modification of the manually added ssh-key. The key was removed.
 
-# HW#6 (terraform-1 branch)
+## HW#6 (terraform-1 branch)
  - install the tfswitch the command line tool that let you switch between defferent versions of terraform:
 ``` $ curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash```
 for more details follow this link: https://warrensbox.github.io/terraform-switcher/ (or more complex way https://blog.gruntwork.io/installing-multiple-versions-of-terraform-with-homebrew-899f6d124ff9)
@@ -275,9 +267,9 @@ module "vpc" {
 
  - [x] - create the "prod" and "stage" environments
  - [x] - extra task: organize storing the state-file on the remote storage-bucket separate one for each env (*)
-Using the storage-bucket module the two backets were created and discribed in backend.tf files for stage and prod envs respectively:
+Using the storage-bucket module the two buckets were created and discribed in backend.tf files for stage and prod envs respectively:
 ```
-# the terraform backend for storage env
+# terraform backend.tf for storage env
 terraform {
   backend "gcs" {
     bucket = "ivb-trform-stage"
