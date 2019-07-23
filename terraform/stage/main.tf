@@ -14,20 +14,23 @@ provider "google" {
 }
 
 module "app" {
-  source          = "../modules/app"
-  public_key_path = "${var.public_key_path}"
-  zone            = "${var.zone}"
-  app_disk_image  = "${var.app_disk_image}"
-  count_instance  = "${var.count_instance}"
-
-  #  app_external_ip = "${var.module.app.app_ext_ip}"
+  source		= "../modules/app"
+  public_key_path	= "${var.public_key_path}"
+  private_key           = "${var.private_key}"
+  zone			= "${var.zone}"
+  app_disk_image	= "${var.app_disk_image}"
+  db_int_ip		= "${module.db.db_int_ip}"
+  count_instance	= "${var.count_instance}"
+  enable_provisioning   = "${var.enable_provisioning}"
 }
 
 module "db" {
-  source          = "../modules/db"
-  public_key_path = "${var.public_key_path}"
-  zone            = "${var.zone}"
-  db_disk_image   = "${var.db_disk_image}"
+  source		= "../modules/db"
+  public_key_path	= "${var.public_key_path}"
+  private_key		= "${var.private_key}"
+  zone			= "${var.zone}"
+  db_disk_image		= "${var.db_disk_image}"
+  app_ext_ip		= "${module.app.app_ext_ip}"
 }
 
 module "vpc" {
