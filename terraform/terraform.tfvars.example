@@ -1,6 +1,6 @@
 project = "project-idnnnnn"
 public_key_path = "~/.ssh/appuser.pub"
-private_key_path = "~/.ssh/appuser"
+private_key = "~/.ssh/appuser"
 ssh_user  = "appuser"
 ssh_user1 = "appuser1"
 ssh_user2 = "appuser2"

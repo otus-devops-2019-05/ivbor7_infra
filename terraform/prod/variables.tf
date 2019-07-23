@@ -30,21 +30,16 @@ variable ssh_user2 {
 }
 
 variable public_key_path {
-  # variable description
   description = "Path to the public key used for ssh access"
+}
 
-  #  default = "~/.ssh/appuser.pub"
+variable private_key {
+  description = "Path to the private key used for ssh access"
 }
 
 variable disk_image {
   description = "Disk image"
   default     = "reddit-base"
-}
-
-variable private_key_path {
-  description = "Path to ssh private key"
-
-  #  default = "~/.ssh/appuser"
 }
 
 variable count_instance {
@@ -60,4 +55,9 @@ variable app_disk_image {
 variable db_disk_image {
   description = "Disk image for reddit db"
   default     = "reddit-db-base"
+}
+
+variable enable_provisioning {
+  description	= "If set to true, enable provisioning"
+  default	= 1
 }
