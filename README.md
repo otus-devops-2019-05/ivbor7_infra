@@ -290,3 +290,18 @@ An attempt to create VM instances in "prod" and "stage" environments simultaneou
 > Error: Apply cancelled.
 
 
+ - [x] - extra task : (**) - deploy the application on the app instance using the module approach and provisioner directives.   
+DATABASE_URL - the environment variable pass the internal ip address of mongodb-instance to the app-instance for interaction.
+The variable "enable_provisioning" is used to optionally disable the application deployment :
+```
+provisioner "remote-exec" {
+    inline = ["chmod +x /tmp/deploy.sh","${var.enable_provisioning == "true" ? local.inst-app : local.noapp}"]
+  }
+}
+
+locals {
+  inst-app    = "bash /tmp/deploy.sh"
+  noapp = "echo 'The app will not be installed'"
+}
+```
+
