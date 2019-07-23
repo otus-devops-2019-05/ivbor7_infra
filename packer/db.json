@@ -1,0 +1,33 @@
+{
+
+    "builders": [
+        {
+            "type": "googlecompute",
+            "project_id": "{{user `project_id`}}",
+            "image_name": "reddit-db-base",
+            "image_family": "reddit-db",
+            "source_image_family": "reddit-base",
+            "image_description": "MongoDB server",
+            "disk_size": 10,
+            "disk_type": "pd-standard",
+            "disk_name": "",
+            "zone": "{{user `zone`}}",
+            "network": "default",
+            "ssh_username": "appuser",
+            "machine_type": "{{user `machine_type`}}",
+            "tags": [
+                "http-server",
+                "https-server",
+                "puma-server"
+            ]
+        }
+    ],
+ 
+   "provisioners": [
+        {
+            "type": "shell",
+            "script": "scripts/install_mongodb.sh",
+            "execute_command": "sudo {{.Path}}"
+        }
+     ]
+}

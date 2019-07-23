@@ -172,7 +172,8 @@ Inside VM the puma-server will start due to puma.service created and provisioned
 
  - [x] - Create shell-script create-reddit-vm.sh in config-scripts directory to run the VM instance with running reddit application inside.
 
- ## HW#6
+
+## HW#6 (terraform-1 branch)
  - install the tfswitch the command line tool that let you switch between defferent versions of terraform:
 ``` $ curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash```
 for more details follow this link: https://warrensbox.github.io/terraform-switcher/ (or more complex way https://blog.gruntwork.io/installing-multiple-versions-of-terraform-with-homebrew-899f6d124ff9)
@@ -228,3 +229,79 @@ variable count_instance {
 # The required number of app instances is set in terraform.tvars:
 count_instance = 2
 ```
+
+## HW#7 (terraform-2 branch)
+This work is devoted to the transition to the use of modules in the description of the infrastructure.
+To implement such an approach the following tasks were accomplished:
+ - [x] - the firewall rule for ssh access management via terraform was imported running the following command:
+ ```terraform import google_compute_firewall.firewall_ssh default-allow-ssh```
+ - [x] - two templates db.json and app.json were created to bake two separate imagies for application and database instances using packer
+```
+ $ packer build -var-file=variables.json app.json
+ $ packer build -var-file=variables.json db.json
+```
+ - [x] - three local modules: app, db and vpc were implemented then described in main.tf:
+```
+  module "app" {
+  source          = "modules/app"
+  public_key_path = "${var.public_key_path}"
+  zone            = "${var.zone}"
+  app_disk_image  = "${var.app_disk_image}"
+  count_instance  = "${var.count_instance}"
+}
+
+module "db" {
+  source          = "modules/db"
+  public_key_path = "${var.public_key_path}"
+  zone            = "${var.zone}"
+  db_disk_image   = "${var.db_disk_image}"
+}
+
+module "vpc" {
+  source          = "modules/vpc"
+#  source_ranges = ["178.94.15.151/32"]
+  source_ranges   = ["0.0.0.0/0"]
+}
+```
+ - to start using these modules run the command: `$ terraform get`
+
+ - [x] - create the "prod" and "stage" environments
+ - [x] - extra task: organize storing the state-file on the remote storage-bucket separate one for each env (*)
+Using the storage-bucket module the two buckets were created and discribed in backend.tf files for stage and prod envs respectively:
+```
+# terraform backend.tf for storage env
+terraform {
+  backend "gcs" {
+    bucket = "ivb-trform-stage"
+    prefix = "reddit-stage"
+  }
+}
+```
+
+An attempt to create VM instances in "prod" and "stage" environments simultaneously causes an error due to creating the .tflock-file on the remote storage that exists during the entire period of applying the configuration:        \
+> Do you want to perform these actions?
+>  Terraform will perform the actions described above.
+>  Only 'yes' will be accepted to approve.
+>
+>  Enter a value: yes
+>
+> Releasing state lock. This may take a few moments...
+>
+> Error: Apply cancelled.
+
+
+ - [x] - extra task : (**) - deploy the application on the app instance using the module approach and provisioner directives.   
+DATABASE_URL - the environment variable pass the internal ip address of mongodb-instance to the app-instance for interaction.
+The variable "enable_provisioning" is used to optionally disable the application deployment :
+```
+provisioner "remote-exec" {
+    inline = ["chmod +x /tmp/deploy.sh","${var.enable_provisioning == "true" ? local.inst-app : local.noapp}"]
+  }
+}
+
+locals {
+  inst-app    = "bash /tmp/deploy.sh"
+  noapp = "echo 'The app will not be installed'"
+}
+```
+
