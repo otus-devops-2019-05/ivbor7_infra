@@ -305,7 +305,7 @@ locals {
 }
 ```
 
-##HW#8 Ansible (branch ansible-1)
+## HW#8 Ansible (branch ansible-1)
 
  - [x] Install ansible v.2.4.6 :
 ```
@@ -314,10 +314,10 @@ $ sudo pip install ansible==2.4.6
 ```
 An Error have arisen : [WARNING] Ansible is in a world writable directory (~/git/infra/ansible), ignoring it as an ansible.cfg source.
 fix: `$ export ANSIBLE_CONFIG="/git/infra/ansible"`
- - [x] - Local ansible inventory and config files were created. A json-template were added to obtain output in json format. The  maint.tf and outputs.tf in terraform stage were adjusted accordingly.
+ - [x] - local ansible inventory and config files were created. A json-template were added to obtain output in json format. The  maint.tf and outputs.tf in terraform stage were adjusted accordingly.
  - [x] - inventory files were added in .json and .yml formats
- - [x] - Simple playbook clone.yml was added to clone the reddit app repo to appserver. Some tests
- - after removing the reddit folder on remote host: ` ansible app -m command -a 'rm -rf ~/reddit'`, clone.yml playbook has been performed successfully:
+ - [x] - simple playbook clone.yml was added to clone the reddit app repo to appserver. Some tests
+ - after removing the reddit folder on the appserver: ` ansible app -m command -a 'rm -rf ~/reddit'`, clone.yml playbook has been performed successfully:
 ```
 < TASK [Clone repo] >
 ...
@@ -329,7 +329,8 @@ appserver                  : ok=2    **changed=1**    unreachable=0    failed=0
 ```
 
  - [x] extra task with (*) - create inventory.json and script that will use this one or generate dynamic inventory on the fly.
-Additionally for extracting the instance's IPs via Terraform, install "jq" and "envsubst" utilities on the target host.
+Additionally to extract the instance's IPs via Terraform, install "jq" and "envsubst" utilities on the target host. Appropriate places in script are marked and commented.
+ - Checking:
 ```
 $ ansible all -m ping
 dbserver | SUCCESS => {
