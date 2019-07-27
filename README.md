@@ -305,3 +305,68 @@ locals {
 }
 ```
 
+## HW#8 Ansible (branch ansible-1)
+
+ - [x] Install ansible v.2.4.6 :
+```
+$ sudo add-apt-repository ppa:ansible/ansible-2.4
+$ sudo pip install ansible==2.4.6
+```
+An Error have arisen : [WARNING] Ansible is in a world writable directory (~/git/infra/ansible), ignoring it as an ansible.cfg source.
+fix: `$ export ANSIBLE_CONFIG="/git/infra/ansible"`
+ - [x] - local ansible inventory and config files were created. A json-template were added to obtain output in json format. The  maint.tf and outputs.tf in terraform stage were adjusted accordingly.
+ - [x] - inventory files were added in .json and .yml formats
+ - [x] - simple playbook clone.yml was added to clone the reddit app repo to appserver. Some tests
+ - after removing the reddit folder on the appserver: ` ansible app -m command -a 'rm -rf ~/reddit'`, clone.yml playbook has been performed successfully:
+```
+< TASK [Clone repo] >
+...
+changed: [appserver]
+ ____________
+< PLAY RECAP >
+
+appserver                  : ok=2    **changed=1**    unreachable=0    failed=0
+```
+
+ - [x] extra task with (*) - create inventory.json and script that will use this one or generate dynamic inventory on the fly.
+Additionally to extract the instance's IPs via Terraform, install "jq" and "envsubst" utilities on the target host. Appropriate places in script are marked and commented.
+ - Checking:
+```
+$ ansible all -m ping
+dbserver | SUCCESS => {
+    "changed": false,
+    "failed": false,
+    "ping": "pong"
+}
+appserver | SUCCESS => {
+    "changed": false,
+    "failed": false,
+    "ping": "pong"
+}
+
+$ ansible all -m shell -a 'hostname; uptime'
+appserver | SUCCESS | rc=0 >>
+reddit-app-1
+ 19:39:49 up  7:55,  1 user,  load average: 0.00, 0.02, 0.00
+
+dbserver | SUCCESS | rc=0 >>
+reddit-db-base
+ 19:39:53 up  7:57,  1 user,  load average: 0.00, 0.00, 0.00
+```
+The main defferences between static inventory and dynamic are:
+ - ansible track hosts from multiple external sources with help of the dynamic inventory that can be obtain in to ways:
+  [Inventory Plugins](https://docs.ansible.com/ansible/latest/plugins/inventory.html#inventory-plugins) and [inventory scripts](https://github.com/ansible/ansible/tree/devel/contrib/inventory)
+ - script has to accept --list and --host arguments
+ - ansible call it with argument --list and it will output JSON to stdout
+ - in order to avoid running script with --host argument, script has to contain empty "_meta"-section like this `"_meta": {"hostvars": {}}`
+ To use the dynamic inventory the ansible.cfg should be corrected accordingly:
+  - for inventory plugins
+```
+  [inventory]
+enable_plugins = advanced_host_list, constructed, yaml
+```
+ - and for Inventory scripts:
+```
+[defaults]
+inventory = ./dyninventory.sh
+```
