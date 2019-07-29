@@ -6,7 +6,7 @@
     "machine_type": "",
     "zone": "",
     "project_id": "",
-    "image_description": "Base image with MongoDB, Ruby based on Ubuntu 1604 LTS",
+    "image_description": "Base image with Bundle and Ruby installed, that based on Ubuntu 1604 LTS",
     "region": "us-central1",
     "network": "default",
     "tags": "puma-server"
@@ -35,9 +35,9 @@
 
     "provisioners": [
 	{
-	    "type": "shell",
-	    "script": "scripts/deploy.sh",
-	    "execute_command": "{{.Path}}"
+            "type": "shell",
+            "script": "scripts/install_ruby.sh",
+            "execute_command": "sudo {{.Path}}"	    
 	}
     ]
 }

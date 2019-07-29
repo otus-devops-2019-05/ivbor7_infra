@@ -41,11 +41,11 @@ resource "google_compute_instance" "app" {
     private_key = "${file(var.private_key)}"
   }
 
-  provisioner "file" {
+#  provisioner "file" {
 #    source      = "../modules/app/files/puma.service"
-    content      = "${data.template_file.puma_service.rendered}"
-    destination = "/tmp/puma.service"
-  }
+#    content      = "${data.template_file.puma_service.rendered}"
+#    destination = "/tmp/puma.service"
+#  }
 
   provisioner "file" {
     source      = "../modules/app/files/deploy.sh"
