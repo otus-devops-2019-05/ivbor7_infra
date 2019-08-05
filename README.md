@@ -316,7 +316,7 @@ An Error have arisen : [WARNING] Ansible is in a world writable directory (~/git
 fix: `$ export ANSIBLE_CONFIG="/git/infra/ansible"`
  - [x] - local ansible inventory and config files were created. A json-template were added to obtain output in json format. The  maint.tf and outputs.tf in terraform stage were adjusted accordingly.
  - [x] - inventory files were added in .json and .yml formats
- - [x] - simple playbook clone.yml was added to clone the reddit app repo to appserver. Some tests
+ - [x] - simple playbook clone.yml was added to clone the reddit app repo to appserver. During the tests an error has arisen: `AttributeError: 'module' object has no attribute 'SSL_ST_INIT'` Fix: `sudo pip install -U pyopenssl`
  - after removing the reddit folder on the appserver: ` ansible app -m command -a 'rm -rf ~/reddit'`, clone.yml playbook has been performed successfully:
 ```
 < TASK [Clone repo] >

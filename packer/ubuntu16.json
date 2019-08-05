@@ -7,7 +7,7 @@
     "zone": "",
     "project_id": "",
     "image_description": "Base image with Bundle and Ruby installed, that based on Ubuntu 1604 LTS",
-    "region": "us-central1",
+    "region": "europe-north1",
     "network": "default",
     "tags": "puma-server"
 
