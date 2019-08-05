@@ -2,7 +2,7 @@
 
     "source_image_family": "some-OS-image",
     "machine_type": "appropriate-machine-conf",
-    "region": "some-region"
+    "region": "some-region",
     "zone": "some-zone-name",
     "project_id": "product-IDNNNN"
 
