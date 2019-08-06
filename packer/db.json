@@ -4,7 +4,7 @@
         {
             "type": "googlecompute",
             "project_id": "{{user `project_id`}}",
-            "image_name": "reddit-db-base",
+            "image_name": "reddit-db-ansib_base",
             "image_family": "reddit-db",
             "source_image_family": "reddit-base",
             "image_description": "MongoDB server",
@@ -25,9 +25,8 @@
  
    "provisioners": [
         {
-            "type": "shell",
-            "script": "scripts/install_mongodb.sh",
-            "execute_command": "sudo {{.Path}}"
+	     "type": "ansible",
+	     "playbook_file": "ansible/packer_db.yml"
         }
      ]
 }

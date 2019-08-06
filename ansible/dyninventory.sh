@@ -12,21 +12,21 @@ function prn_help() {
     echo
     echo "<ONE option>:"
     echo "  --list	Generate inventory in json format."
-    echo "  --host	Generate "
+    echo "  --host	Generate epmty -meta section"
     echo "-------------------------------------------------------"
 }
 
 cd  ../terraform/stage
 
 # this section should be uncommented after installing jq utility on the host, it necessary for extracting the instance's IPs via TF  
-#DB_IP=$(terraform output -json db_ext_ip | jq ".value")
-#APP_IP=$(terraform output -json app_ext_ip | jq ".value")
+DB_IP=$(terraform output -json db_ext_ip | jq ".value")
+APP_IP=$(terraform output -json app_ext_ip | jq ".value")
 
-APP_IP="35.232.3.184"
-DB_IP="34.66.253.118"
+#APP_IP="35.232.3.184"
+#DB_IP="34.66.253.118"
 #echo "$1"
 #echo "$PROGRAM"
-#echo $AP_PIP
+#echo $APP_IP
 #echo $DB_IP
 
 export APP_IP DB_IP

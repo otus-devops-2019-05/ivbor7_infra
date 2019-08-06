@@ -235,6 +235,8 @@ This work is devoted to the transition to the use of modules in the description 
 To implement such an approach the following tasks were accomplished:
  - [x] - the firewall rule for ssh access management via terraform was imported running the following command:
  ```terraform import google_compute_firewall.firewall_ssh default-allow-ssh```
+ also before creating the new images we need the host to be ssh-accessible, so we need add the firewall rule for ssh usinf terraform:
+ `terraform apply -target=google_compute_firewall.firewall_ssh`
  - [x] - two templates db.json and app.json were created to bake two separate imagies for application and database instances using packer
 ```
  $ packer build -var-file=variables.json app.json
@@ -292,7 +294,7 @@ An attempt to create VM instances in "prod" and "stage" environments simultaneou
 
  - [x] - extra task : (**) - deploy the application on the app instance using the module approach and provisioner directives.   
 DATABASE_URL - the environment variable pass the internal ip address of mongodb-instance to the app-instance for interaction.
-The variable "enable_provisioning" is used to optionally disable the application deployment :
+As an option we can use templates, see more details [here](https://www.terraform.io/docs/configuration-0-11/interpolation.html#join_delim_list).The variable "enable_provisioning" is used to optionally disable the application deployment :
 ```
 provisioner "remote-exec" {
     inline = ["chmod +x /tmp/deploy.sh","${var.enable_provisioning == "true" ? local.inst-app : local.noapp}"]
@@ -316,7 +318,7 @@ An Error have arisen : [WARNING] Ansible is in a world writable directory (~/git
 fix: `$ export ANSIBLE_CONFIG="/git/infra/ansible"`
  - [x] - local ansible inventory and config files were created. A json-template were added to obtain output in json format. The  maint.tf and outputs.tf in terraform stage were adjusted accordingly.
  - [x] - inventory files were added in .json and .yml formats
- - [x] - simple playbook clone.yml was added to clone the reddit app repo to appserver. Some tests
+ - [x] - simple playbook clone.yml was added to clone the reddit app repo to appserver. During the tests an error has arisen: `AttributeError: 'module' object has no attribute 'SSL_ST_INIT'` Fix: `sudo pip install -U pyopenssl`
  - after removing the reddit folder on the appserver: ` ansible app -m command -a 'rm -rf ~/reddit'`, clone.yml playbook has been performed successfully:
 ```
 < TASK [Clone repo] >
@@ -354,9 +356,9 @@ reddit-db-base
  19:39:53 up  7:57,  1 user,  load average: 0.00, 0.00, 0.00
 ```
 The main defferences between static inventory and dynamic are:
- - ansible track hosts from multiple external sources with help of the dynamic inventory that can be obtain in to ways:
+ - ansible tracks hosts from multiple external sources with help of the dynamic inventory that can be obtain in to ways:
   [Inventory Plugins](https://docs.ansible.com/ansible/latest/plugins/inventory.html#inventory-plugins) and [inventory scripts](https://github.com/ansible/ansible/tree/devel/contrib/inventory)
- - script has to accept --list and --host arguments
+ - script has to accept --list and --host arguments [example of creating such script](https://www.jeffgeerling.com/blog/creating-custom-dynamic-inventories-ansible)
  - ansible call it with argument --list and it will output JSON to stdout
  - in order to avoid running script with --host argument, script has to contain empty "_meta"-section like this `"_meta": {"hostvars": {}}`
  To use the dynamic inventory the ansible.cfg should be corrected accordingly:
@@ -369,4 +371,48 @@ enable_plugins = advanced_host_list, constructed, yaml
 ```
 [defaults]
 inventory = ./dyninventory.sh
+```
+## HW#9 Ansible (branch ansible-2)
+
+ - [x] - mongod.conf.j2 - mongod.cnf template for adjusting MongoDB and ansible/reddit_app.yml playbook to copy the rendered config file on dbserver were created.
+ - [x] - create one playbook reddit_app_one_play.yml for several scenerios
+ - [x] - create several playbooks one for each scenarious: for MongoDB, for Puma-sevice configuring and for deploying reddit application.
+ - [x] extra task with (*) - use the dynamic iventory for GCP. For this task it's been chosen Ansible GCP compute inventory plugin see details at this [link](http://matthieure.me/2018/12/31/ansible_inventory_plugin.html)
+  The gcp_compute inventory plugin dynamically queries GCE and tells Ansible what nodes can be managed. How it works and can be adjusted
+  please follow on this [source](https://docs.ansible.com/ansible/latest/scenario_guides/guide_gce.html)
+
+ - install the key components with help [PIP](https://www.tecmint.com/install-pip-in-linux/):
+```
+pip install requests
+pip install google-auth
+```
+ - activate using the GCP Compute plugin in ansible.cfg:
+```
+[inventory]
+enable_plugins = gcp_compute
+```
+ - create a file that ends in .gcp.yml or .gcp_compute.yml in your root directory.
+  minimal config is as the follows:
+ ```
+plugin: gcp_compute                                     # name the plugin you want to use (use `ansible-doc -t inventory -l` to list available plugins)
+projects:
+  - infra-244305                                        # Id of your gcp project
+regions:                                                # regions from your project you want to fetch inventory from (you can also use zones instead of regions if you targe$
+  - us-central1
+filters: []
+auth_kind: serviceaccount                               # gcp authentication kind. with service account you should provide the service account json key file to authenticate
+service_account_file: <service_account_file>.json       # Service account json keyfile
+ ```
+Error "Running gcp_compute plugin failed" occure. As it turned out modules and plugins have not been installed during the ansible installation and an error occured after activating the plugin: `failed to load inventory plugin, skipping gcp_compute`
+ [fix](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#running-from-source): `pip install ansible==4.2.6; pippip install --user -r ./requirements.txt`
+As it's recommended in this [article](http://matthieure.me/2018/12/31/ansible_inventory_plugin.html), I've used the [serviceaccount](https://cloud.google.com/iam/docs/creating-managing-service-account-keys) authentication method.
+
+ - [x] - replace the Packer bash-script provisioning by Ansible-playbook. Useful links to Ansible Docs: [Loops in Ansible](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html#iterating-over-a-simple-list)
+ and [modules] in Ansible (https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html)
+ An error has occured: `googlecompute: fatal: [default]: FAILED! => {"changed": false, "msg": "Failed to auto-install python-apt. Error was: 'E: Could not get lock /var/lib/dpkg/lock-frontend - open (11: Resource temporarily unavailable)\nE: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), is another process using it?'"}`
+ and `W: GPG error: http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 Release: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY D68FA50FEA312927`
+ Fix - fingerprint in packer_db.yml corrected:
+```
+apt_key:
+  id: EA312927
 ```
