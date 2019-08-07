@@ -35,6 +35,15 @@ module "db" {
 
 module "vpc" {
   source = "../modules/vpc"
-  source_ranges = ["178.94.14.149/32"]
-#  source_ranges = ["0.0.0.0/0"]
+
+  #  source_ranges = ["178.94.14.149/32"]
+  source_ranges = ["0.0.0.0/0"]
+}
+
+resource "template_file" "dyn_inv" {
+  template = "${file("dynamic_invry.json")}"
+  vars {
+    ansb_app_ext_ip = "${module.app.app_ext_ip}"
+    ansb_db_ext_ip = "${module.db.db_ext_ip}"
+  }
 }
