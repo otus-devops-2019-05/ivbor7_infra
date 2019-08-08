@@ -416,3 +416,42 @@ As it's recommended in this [article](http://matthieure.me/2018/12/31/ansible_in
 apt_key:
   id: EA312927
 ```
+
+## HW#10 Ansible (branch ansible-3)
+
+ - [x] Earlier created playbooks were transfered to the separate ansible roles app and db the ansible/roles folder.
+ - [x] Two environments Stage and Prod were described using the created roles.
+ The repository's directory tree was organized in accordance with best practices.
+ - [x] jdauphant.nginx community role used to configure reverse proxy for reddit application.
+ For this purpose the ansible-galaxy utility and environments/prod|stage/requirements.yml file (different for each environment) were
+To install this role run the command below:
+```
+ansible-galaxy install -r environments/stage/requirements.yml
+```
+ - [x] adjust additional 80 port to access the reddit application.
+ To open this posrt the number 80 added to firewall rule google_compute_firewall.firewall_puma:
+ 'allow { protocol = "tcp", ports = ["9292","80"] }`
+
+ - [x] use Ansible Vault to encrypt user's credentials.
+ vault.key - this file contains an arbitrary text to encrypt the credentials.yml.
+ It should be stored in place different from git-repository.
+ credentials.yml - the playbook used for user's accounts creating.
+Path to vault.key location should be described in ansible.cnf with help vault_password_file option:
+```
+[defaults]
+...
+vault_password_file = vault.key
+```
+ - [x] extra task with (*) - adjust dynamic inventory for Prod and Stage environments.
+ Choose the best from  available. gcp_compute was choosen and configured.
+ To configure ansible gcp_compute plugin the yaml-files ansible/evironment/stage|prod/dyninv.gcp.yml
+ were created for each env. Then edit the ansible.cnf to activate gcp_compute plugin in following way:
+```
+[defaults]
+inventory = ./environment/stage/dyninv.gcp.yml ; path to yaml file describes the dynamic inventory using the gcp_compute plugin
+...
+[inventory]
+enable_plugins = gcp_compute, yaml, ini, script
+
+```
+ - [ ] extra task with (**) ToDo: Configure the TravisCI to control the infrastructure code state.
