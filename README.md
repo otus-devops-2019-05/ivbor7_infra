@@ -419,22 +419,21 @@ apt_key:
 
 ## HW#10 Ansible (branch ansible-3)
 
- - [x] Earlier created playbooks were transfered to the separate ansible roles app and db that are placed into the ansible/roles folder.
+ - [x] Earlier created playbooks were transfered to the separate ansible roles **app** and **db** that are placed into the **ansible/roles** folder.
  - [x] Two environments Stage and Prod were described using the created roles.
  The repository's directory tree was organized in accordance with best practices.
- - [x] jdauphant.nginx community role used to configure reverse proxy for reddit application.
- For this purpose the ansible-galaxy utility and environments/prod|stage/requirements.yml file (different for each environment) were
+ - [x] **jdauphant.nginx** community role used to configure reverse proxy for reddit application.
+ For this purpose the ansible-galaxy utility and **environments/prod|stage/requirements.yml** file (it's recommended to be different for each environment) were used.
 To install this role run the command below:
 ```
 ansible-galaxy install -r environments/stage/requirements.yml
 ```
  - [x] adjust additional 80 port to access the reddit application.
- To open this posrt the number 80 added to firewall rule google_compute_firewall.firewall_puma:
+ To open this port, the number 80 added to firewall rule google_compute_firewall.firewall_puma:
  'allow { protocol = "tcp", ports = ["9292","80"] }`
 
  - [x] use Ansible Vault to encrypt user's credentials.
- vault.key - this file contains an arbitrary text to encrypt the credentials.yml.
- It should be stored in place different from git-repository.
+ vault.key - this file contains an arbitrary text to encrypt the credentials.yml. It should be stored in place different from git-repository.
  credentials.yml - the playbook used for user's accounts creating.
 Path to vault.key location should be described in ansible.cnf with help vault_password_file option:
 ```
@@ -443,9 +442,9 @@ Path to vault.key location should be described in ansible.cnf with help vault_pa
 vault_password_file = vault.key
 ```
  - [x] extra task with (*) - adjust dynamic inventory for Prod and Stage environments.
- Choose the best approach from  available . A gcp_compute plugin was choosen and configured.
+ Choose the best approach from  available. A gcp_compute plugin was choosen and configured.
  To configure ansible gcp_compute plugin the yaml-files ansible/evironment/stage|prod/dyninv.gcp.yml
- were created for each env. Then edit the ansible.cnf to activate gcp_compute plugin in following way:
+ were created for each env. Then edit the ansible.cnf to activate gcp_compute plugin in the following way:
 ```
 [defaults]
 inventory = ./environment/stage/dyninv.gcp.yml ; path to yaml file describes the dynamic inventory using the gcp_compute plugin
