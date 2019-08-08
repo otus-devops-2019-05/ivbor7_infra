@@ -7,8 +7,8 @@ groups:
   app: "'-app-' in name"
   db: "'-db-' in name"
 hostnames:
-#  - name
-  - public_ip
+  - name
+#  - public_ip
 #  - private_ip
 compose:
 # Set an inventory parameter to use the Public IP address to connect to the host
