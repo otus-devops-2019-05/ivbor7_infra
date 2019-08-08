@@ -6,3 +6,5 @@
 *.tfvars
 .terraform/
 *.retry
+jdauphant.nginx
+*.key
