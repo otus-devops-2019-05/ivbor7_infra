@@ -1,0 +1,11 @@
+plugin: gcp_compute
+projects:
+  - infra-244305
+regions:       
+  - us-central1
+groups:
+  app: "'app' in name"
+  db: "'-db' in name"
+filters: []
+auth_kind: serviceaccount
+service_account_file: /home/ivbor/.ansible/infra-244305-71e82336c304.json
