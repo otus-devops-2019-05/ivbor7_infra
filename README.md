@@ -419,7 +419,7 @@ apt_key:
 
 ## HW#10 Ansible (branch ansible-3)
 
- - [x] Earlier created playbooks were transfered to the separate ansible roles app and db the ansible/roles folder.
+ - [x] Earlier created playbooks were transfered to the separate ansible roles app and db that are placed into the ansible/roles folder.
  - [x] Two environments Stage and Prod were described using the created roles.
  The repository's directory tree was organized in accordance with best practices.
  - [x] jdauphant.nginx community role used to configure reverse proxy for reddit application.
@@ -443,7 +443,7 @@ Path to vault.key location should be described in ansible.cnf with help vault_pa
 vault_password_file = vault.key
 ```
  - [x] extra task with (*) - adjust dynamic inventory for Prod and Stage environments.
- Choose the best from  available. gcp_compute was choosen and configured.
+ Choose the best approach from  available . A gcp_compute plugin was choosen and configured.
  To configure ansible gcp_compute plugin the yaml-files ansible/evironment/stage|prod/dyninv.gcp.yml
  were created for each env. Then edit the ansible.cnf to activate gcp_compute plugin in following way:
 ```
@@ -454,4 +454,4 @@ inventory = ./environment/stage/dyninv.gcp.yml ; path to yaml file describes the
 enable_plugins = gcp_compute, yaml, ini, script
 
 ```
- - [ ] extra task with (**) ToDo: Configure the TravisCI to control the infrastructure code state.
+ - [ ] extra task with (**) **ToDo**: Configure the TravisCI to control the infrastructure code state.
