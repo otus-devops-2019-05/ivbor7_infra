@@ -4,7 +4,7 @@
         {
             "type": "googlecompute",
             "project_id": "{{user `project_id`}}",
-            "image_name": "reddit-app-ansib_base",
+            "image_name": "reddit-app-ansibrole_base",
             "image_family": "reddit-app",
             "source_image_family": "reddit-base",
             "image_description": "Ruby server",
@@ -26,8 +26,10 @@
 
     "provisioners": [
         {
-	    "type": "ansible",
-	    "playbook_file": "ansible/playbooks/packer_app.yml"
+            "type": "ansible",
+            "playbook_file": "ansible/playbooks/packer_app.yml",
+            "extra_arguments": ["--tags","ruby"],
+            "ansible_env_vars": ["ANSIBLE_ROLES_PATH={{ pwd }}/ansible/roles"]
         }
      ]
 

@@ -6,13 +6,17 @@
 *.tfvars
 .terraform/
 *.retry
+variables.json
 jdauphant.nginx
 *.key
 # Vagrant & molecule
 .vagrant/
 *.log
-*.pyc
-.molecule
+.molecule/
 .cache
 .pytest_cache
 *.gpg
+PipVirtEnvs/
+*.py[cod]     # Will match .pyc, .pyo and .pyd files.
+__pycache__/  # Exclude the whole folder
+
