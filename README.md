@@ -504,4 +504,4 @@ def test_mongo_running_and_enabled(host):
 ```
  - [x] Apply db and app roles in packer's playbooks to make base images.
 
- - [ ] - extra task with (*) **ToDo**: Move db role into separate repos and configure Travis CI for automatical tests running.
+ - [ ] - extra task with (*) **ToDo**: Move db role into a separate repos and configure Travis CI for automatical tests running.
