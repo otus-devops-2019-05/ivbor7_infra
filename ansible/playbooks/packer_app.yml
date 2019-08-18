@@ -2,25 +2,5 @@
 - name: Install Ruby && Bundler
   hosts: all
   become: true
-  tasks:
-  # Install ruby and bundler dependencies in loop
-  - name: Update apt cache as a separate task
-    apt:
-      update_cache: true
-
-  - name: Pause after cache updating
-    pause:
-      seconds: 15
-
-
-  - name: Install ruby and rubygems and required packages
-    apt: 
-      name: "{{ packages }}"
-      state: present
-    vars:
-      packages:
-      - python-apt
-      - ruby-full
-      - ruby-bundle
-      - build-essential
-
+  roles:
+    - app
